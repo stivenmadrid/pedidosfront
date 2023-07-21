@@ -1,6 +1,6 @@
 <template>
- <div class="container-fluid vh-100" style="overflow-y: auto; max-height: 100vh;">
-    <br>
+  <div class="container-fluid vh-100" style="overflow-y: auto; max-height: 100vh">
+    <br />
     <button @click="abrirModal" class="btn btn-success">Agregar Categoría</button>
 
     <h3 class="title">Listado de categorías</h3>
@@ -14,9 +14,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody class="table-group-divider" id="contenidocategorias">
-        
-        </tbody>
+        <tbody class="table-group-divider" id="contenidocategorias"></tbody>
       </table>
     </div>
   </div>
@@ -31,14 +29,21 @@
           <div class="field">
             <label class="label">Nombre de la Categoría</label>
             <div class="control">
-              <input v-model="nuevaCategoria.Nombre_Categoria" class="form-control" type="text" required>
+              <input
+                v-model="nuevaCategoria.Nombre_Categoria"
+                class="form-control"
+                type="text"
+                required
+              />
             </div>
           </div>
           <div class="field">
             <div class="control">
-              <br>
+              <br />
               <button type="submit" class="btn btn-primary">Crear</button>
-              <button type="button" class="btn btn-secondary" @click="cancelarCreacion">Cancelar</button>
+              <button type="button" class="btn btn-secondary" @click="cancelarCreacion">
+                Cancelar
+              </button>
             </div>
           </div>
         </form>
@@ -56,14 +61,21 @@
           <div class="field">
             <label class="label">Nombre de la Categoría</label>
             <div class="control">
-              <input v-model="categoriaSeleccionada.Nombre_Categoria" class="form-control" type="text" required>
+              <input
+                v-model="categoriaSeleccionada.Nombre_Categoria"
+                class="form-control"
+                type="text"
+                required
+              />
             </div>
           </div>
           <div class="field">
             <div class="control">
-              <br>
+              <br />
               <button type="submit" class="btn btn-primary">Guardar</button>
-              <button type="button" class="btn btn-secondary" @click="cancelarEdicion">Cancelar</button>
+              <button type="button" class="btn btn-secondary" @click="cancelarEdicion">
+                Cancelar
+              </button>
             </div>
           </div>
         </form>
@@ -73,11 +85,11 @@
 </template>
 
 <script>
-import axios from 'axios';
-import $ from 'jquery';
-import 'datatables.net';
-import 'datatables.net-dt/css/jquery.dataTables.css';
-import 'datatables.net-responsive-dt/css/responsive.dataTables.css';
+import axios from 'axios'
+import $ from 'jquery'
+import 'datatables.net'
+import 'datatables.net-dt/css/jquery.dataTables.css'
+import 'datatables.net-responsive-dt/css/responsive.dataTables.css'
 
 export default {
   data() {
@@ -93,14 +105,14 @@ export default {
         Nombre_Categoria: ''
       },
       dataTable: null
-    };
+    }
   },
   mounted() {
-    this.getCategorias();
+    this.getCategorias()
   },
   methods: {
     getCategorias() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
 
       axios
         .get('http://127.0.0.1:8000/api/v1/categorias', {
@@ -108,31 +120,31 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        .then(response => {
-          this.categorias = response.data;
-          this.initializeDataTable();
+        .then((response) => {
+          this.categorias = response.data
+          this.initializeDataTable()
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch((error) => {
+          console.log(error)
+        })
     },
     abrirModal() {
-      this.mostrarModal = true;
+      this.mostrarModal = true
     },
     cancelarCreacion() {
-      this.cerrarModal();
+      this.cerrarModal()
     },
     cerrarModal() {
-      this.mostrarModal = false;
-      this.resetForm();
+      this.mostrarModal = false
+      this.resetForm()
     },
     resetForm() {
       this.nuevaCategoria = {
         Nombre_Categoria: ''
-      };
+      }
     },
     crearCategoria() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
 
       axios
         .post('http://127.0.0.1:8000/api/v1/categorias/store', this.nuevaCategoria, {
@@ -140,32 +152,32 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        .then(response => {
+        .then((response) => {
           this.$swal({
             title: 'Éxito!',
             text: response.data.message,
             icon: 'success'
-          });
-          this.getCategorias();
-          this.cerrarModal();
+          })
+          this.getCategorias()
+          this.cerrarModal()
         })
-        .catch(error => {
-          let errorMessage = 'Error al realizar la solicitud al servidor';
+        .catch((error) => {
+          let errorMessage = 'Error al realizar la solicitud al servidor'
           if (error.response) {
-            errorMessage = error.response.data.message || 'Error al crear la categoría';
+            errorMessage = error.response.data.message || 'Error al crear la categoría'
           } else if (error.request) {
-            errorMessage = 'No se recibió respuesta del servidor';
+            errorMessage = 'No se recibió respuesta del servidor'
           }
           this.$swal({
             title: 'Error!',
             text: errorMessage,
             icon: 'error'
-          });
-          console.error('Error al crear la categoría:', error);
-        });
+          })
+          console.error('Error al crear la categoría:', error)
+        })
     },
     eliminarCategoria(id) {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
 
       axios
         .delete(`http://127.0.0.1:8000/api/v1/categorias/destroy/${id}`, {
@@ -173,73 +185,77 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        .then(response => {
+        .then((response) => {
           this.$swal({
             title: 'Éxito!',
             text: response.data.message,
             icon: 'success'
-          });
-          this.getCategorias();
+          })
+          this.getCategorias()
         })
-        .catch(error => {
-          let errorMessage = 'Error al realizar la solicitud al servidor';
+        .catch((error) => {
+          let errorMessage = 'Error al realizar la solicitud al servidor'
           if (error.response) {
-            errorMessage = error.response.data.message || 'Error al eliminar la categoría';
+            errorMessage = error.response.data.message || 'Error al eliminar la categoría'
           } else if (error.request) {
-            errorMessage = 'No se recibió respuesta del servidor';
+            errorMessage = 'No se recibió respuesta del servidor'
           }
           this.$swal({
             title: 'Error!',
             text: errorMessage,
             icon: 'error'
-          });
-          console.error('Error al eliminar la categoría:', error);
-        });
+          })
+          console.error('Error al eliminar la categoría:', error)
+        })
     },
     abrirModalEdicion(categoria) {
-      this.categoriaSeleccionada = { ...categoria };
-      this.mostrarModalEdicion = true;
+      this.categoriaSeleccionada = { ...categoria }
+      this.mostrarModalEdicion = true
     },
     cancelarEdicion() {
-      this.mostrarModalEdicion = false;
-      this.resetForm();
+      this.mostrarModalEdicion = false
+      this.resetForm()
     },
     editarCategoria() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
 
       axios
-        .put(`http://127.0.0.1:8000/api/v1/categorias/update/${this.categoriaSeleccionada.id}`, this.categoriaSeleccionada, {
-          headers: {
-            Authorization: `Bearer ${token}`
+        .put(
+          `http://127.0.0.1:8000/api/v1/categorias/update/${this.categoriaSeleccionada.id}`,
+          this.categoriaSeleccionada,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
-        })
-        .then(response => {
+        )
+        .then((response) => {
           this.$swal({
             title: 'Éxito!',
             text: response.data.message,
             icon: 'success'
-          });
-          this.getCategorias();
-          this.mostrarModalEdicion = false;
+          })
+          this.getCategorias()
+          this.mostrarModalEdicion = false
         })
-        .catch(error => {
-          let errorMessage ='Error al realizar la solicitud al servidor';
+        .catch((error) => {
+          let errorMessage = 'Error al realizar la solicitud al servidor'
           if (error.response) {
-            errorMessage = error.response.data.message || 'Error al editar la categoría';
+            errorMessage = error.response.data.message || 'Error al editar la categoría'
           } else if (error.request) {
-            errorMessage = 'No se recibió respuesta del servidor';
+            errorMessage = 'No se recibió respuesta del servidor'
           }
           this.$swal({
             title: 'Error!',
             text: errorMessage,
             icon: 'error'
-          });
-          console.error('Error al editar la categoría:', error);
-        });
+          })
+          console.error('Error al editar la categoría:', error)
+        })
     },
     initializeDataTable() {
       if (this.dataTable) {
-        this.dataTable.destroy();
+        this.dataTable.destroy()
       }
 
       this.dataTable = $(this.$refs.dataTable).DataTable({
@@ -253,17 +269,21 @@ export default {
           {
             targets: 2,
             createdCell: (cell, cellData, rowData, rowIndex, colIndex) => {
-              const editarButton = $('<button class="btn btn-primary"><i class="fas fa-edit"></i> </button>');
+              const editarButton = $(
+                '<button class="btn btn-primary"><i class="fas fa-edit"></i> </button>'
+              )
               editarButton.on('click', () => {
-                this.abrirModalEdicion(rowData);
-              });
-              $(cell).empty().append(editarButton);
+                this.abrirModalEdicion(rowData)
+              })
+              $(cell).empty().append(editarButton)
 
-              const eliminarButton = $('<button class="btn btn-danger"><i class="fas fa-trash"></i></button>');
+              const eliminarButton = $(
+                '<button class="btn btn-danger"><i class="fas fa-trash"></i></button>'
+              )
               eliminarButton.on('click', () => {
-                this.eliminarCategoria(rowData.id);
-              });
-              $(cell).append(eliminarButton);
+                this.eliminarCategoria(rowData.id)
+              })
+              $(cell).append(eliminarButton)
             }
           }
         ],
@@ -281,19 +301,13 @@ export default {
             previous: 'Anterior'
           }
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
-
-
-  
-
-
-  
-  <!-- <style scoped>
+<!-- <style scoped>
   .modal {
     display: none;
     position: fixed;
@@ -436,31 +450,30 @@ export default {
 
   </style> -->
 
-  <style scoped>
+<style scoped>
 .container-fluid {
- 
- flex-direction: column;
- align-items: center;
- justify-content: center;
- background-image: url('https://img.freepik.com/fotos-premium/patron-marmol-natural-fondo_1258-22162.jpg');
- background-repeat: repeat;
- background-size: cover;
- background-position: center;
- background-color: rgba(0, 0, 0, 0.5);
- padding-bottom: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url('https://img.freepik.com/fotos-premium/patron-marmol-natural-fondo_1258-22162.jpg');
+  background-repeat: repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-bottom: 20px;
 }
 
 .title {
-   font-size: 56px;
-   font-weight: bold;
-   color: white;
-   border-radius: 30px;
-   margin-bottom: 20px;
-   animation: slideInUp 1s ease;
-   -webkit-text-stroke: 2px orangered;
- color: white; 
- text-align: center;
- }
+  font-size: 56px;
+  font-weight: bold;
+  color: white;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  animation: slideInUp 1s ease;
+  -webkit-text-stroke: 2px orangered;
+  color: white;
+  text-align: center;
+}
 
 .table-responsive {
   width: 100%;
@@ -601,7 +614,4 @@ export default {
     transform: scaleX(1);
   }
 }
-
-
 </style>
-

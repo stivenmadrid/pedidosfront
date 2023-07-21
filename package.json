@@ -1,14 +1,17 @@
 {
-  "name": "frontendpedidos",
-  "version": "0.1.0",
+  "name": "pedidos-front",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
   },
   "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free": "^6.4.0",
+    "@fortawesome/fontawesome": "^1.1.8",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "chart.js": "^4.3.0",
@@ -16,29 +19,26 @@
     "datatables.net-dt": "^1.13.5",
     "datatables.net-responsive-dt": "^2.5.0",
     "jquery": "^3.7.0",
-    "select2": "^4.1.0-rc.0",
+    "pinia": "^2.1.3",
     "select2-bootstrap-theme": "^0.1.0-beta.10",
+    "select2": "^4.1.0-rc.0",
     "socket.io-client": "^4.7.1",
     "sweetalert2": "^11.7.12",
-    "vue": "^3.2.13",
     "vue-data-tables": "^3.4.5",
     "vue-pusher": "^1.1.0",
-    "vue-router": "^4.0.3",
+    "vue-router": "^4.2.2",
     "vue-sweetalert2": "^5.0.5",
-    "vuex": "^4.0.0"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "eslint": "^8.39.0",
     "laravel-echo": "^1.15.1",
-    "pusher-js": "^8.2.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+    "prettier": "^2.8.8",
+    "pusher-js": "^8.2.0",
+    "vite": "^4.3.9"
+  }
 }

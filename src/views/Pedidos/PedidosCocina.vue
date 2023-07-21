@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid vh-100" style="overflow-y: auto; max-height: 100vh;">
+  <div class="container-fluid vh-100" style="overflow-y: auto; max-height: 100vh">
     <h1 class="title">PEDIDOS EN LA COCINA</h1>
 
     <div v-if="cargando" class="loading-message">Cargando...</div>
@@ -8,7 +8,11 @@
 
     <div v-else class="scrollable-container">
       <div class="row">
-        <div class="col-lg-4 col-md-6" v-for="(pedido, index) in pedidos.slice().reverse()" :key="pedido.id">
+        <div
+          class="col-lg-4 col-md-6"
+          v-for="(pedido, index) in pedidos.slice().reverse()"
+          :key="pedido.id"
+        >
           <div class="card">
             <h2 class="card-title">Pedido #{{ pedido.id }}</h2>
 
@@ -16,7 +20,9 @@
 
             <p v-if="!pedido.mesa">Cliente: {{ pedido.cliente }}</p>
 
-            <p :class="{ 'status-new': pedido.estado === 'Nuevo pedido' }">Estado: {{ pedido.estado }}</p>
+            <p :class="{ 'status-new': pedido.estado === 'Nuevo pedido' }">
+              Estado: {{ pedido.estado }}
+            </p>
 
             <p>Total: {{ formatCurrency(pedido.total) }}</p>
 
@@ -27,10 +33,10 @@
               <ul>
                 <li v-for="producto in pedido.productos" :key="producto.id">
                   {{ producto.nombre }} (Cantidad: {{ producto.pivot.cantidad }})
-                  <br>
+                  <br />
                   <template v-if="producto.pivot.observacion">
-        Observaciones: {{ producto.pivot.observacion }}
-      </template>
+                    Observaciones: {{ producto.pivot.observacion }}
+                  </template>
                 </li>
               </ul>
             </div>
@@ -46,70 +52,70 @@
 </template>
 
 <script>
-import axios from 'axios';
-import sonidoNuevoPedido from '@/assets/notipedidos.mp3';
-import Swal from 'sweetalert2';
+import axios from 'axios'
+import sonidoNuevoPedido from '@/assets/notipedidos.mp3'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
     return {
       cargando: true,
       pedidos: [],
-      reproduciendoSonido: false,
-    };
+      reproduciendoSonido: false
+    }
   },
   mounted() {
-    this.cargarPedidos();
-    this.escucharEventos();
+    this.cargarPedidos()
+    this.escucharEventos()
   },
   methods: {
     cargarPedidos() {
-      console.log('Iniciando la carga de pedidos...');
+      console.log('Iniciando la carga de pedidos...')
 
       axios
         .get('http://127.0.0.1:8000/api/v1/pedidos-cocina', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         })
         .then((response) => {
-          console.log('Pedidos cargados:', response.data);
-          this.pedidos = response.data;
-          this.cargando = false;
+          console.log('Pedidos cargados:', response.data)
+          this.pedidos = response.data
+          this.cargando = false
         })
         .catch((error) => {
-          console.error('Error cargando los pedidos:', error);
-          this.cargando = false;
-        });
+          console.error('Error cargando los pedidos:', error)
+          this.cargando = false
+        })
     },
     escucharEventos() {
-      console.log('Iniciando escucha de eventos...');
+      console.log('Iniciando escucha de eventos...')
 
       window.Echo.channel('pedidos').listen('NuevoPedidoEvent', (data) => {
-        console.log('Evento NuevoPedidoEvent recibido:', data);
-        this.pedidos.push(data.pedido);
+        console.log('Evento NuevoPedidoEvent recibido:', data)
+        this.pedidos.push(data.pedido)
 
         if (!this.reproduciendoSonido) {
-          this.reproducirSonidoNuevoPedido();
+          this.reproducirSonidoNuevoPedido()
         }
-      });
+      })
     },
     reproducirSonidoNuevoPedido() {
-      console.log('Intentando reproducir el sonido...');
+      console.log('Intentando reproducir el sonido...')
 
-      this.reproduciendoSonido = true;
+      this.reproduciendoSonido = true
 
-      const audio = new Audio(sonidoNuevoPedido);
+      const audio = new Audio(sonidoNuevoPedido)
       audio
         .play()
         .then(() => {
-          console.log('Sonido reproducido exitosamente.');
-          this.reproduciendoSonido = false;
+          console.log('Sonido reproducido exitosamente.')
+          this.reproduciendoSonido = false
         })
         .catch((error) => {
-          console.error('Error al reproducir el sonido:', error);
-          this.reproduciendoSonido = false;
-        });
+          console.error('Error al reproducir el sonido:', error)
+          this.reproduciendoSonido = false
+        })
     },
     liberarPedido(pedidoId) {
       axios
@@ -118,15 +124,15 @@ export default {
           {},
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
           }
         )
         .then((response) => {
-          const pedidoIndex = this.pedidos.findIndex((pedido) => pedido.id === pedidoId);
+          const pedidoIndex = this.pedidos.findIndex((pedido) => pedido.id === pedidoId)
           if (pedidoIndex !== -1) {
-            this.pedidos[pedidoIndex].estado = 'Liberado';
-            const message = response.data.message;
+            this.pedidos[pedidoIndex].estado = 'Liberado'
+            const message = response.data.message
             Swal.fire({
               icon: 'success',
               title: 'Éxito',
@@ -134,26 +140,26 @@ export default {
               timer: 800,
               timerProgressBar: true,
               didClose: () => {
-                location.reload();
-              },
-            });
+                location.reload()
+              }
+            })
           }
         })
         .catch((error) => {
-          console.error('Error al liberar el pedido:', error);
+          console.error('Error al liberar el pedido:', error)
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'No se pudo liberar el pedido. Por favor, intenta nuevamente.',
-          });
-        });
+            text: 'No se pudo liberar el pedido. Por favor, intenta nuevamente.'
+          })
+        })
     },
     formatCurrency(value) {
-      const formatter = new Intl.NumberFormat('es-CO');
-      return formatter.format(value);
-    },
-  },
-};
+      const formatter = new Intl.NumberFormat('es-CO')
+      return formatter.format(value)
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -178,7 +184,7 @@ export default {
   margin-bottom: 20px;
   animation: slideInUp 1s ease;
   -webkit-text-stroke: 2px orangered;
-  color: white; 
+  color: white;
 }
 
 .loading-message,
@@ -218,7 +224,6 @@ export default {
   text-align: center;
   flex-grow: 1;
   min-height: 0;
-
 }
 
 .card:hover {
