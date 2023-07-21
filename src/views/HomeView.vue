@@ -2,12 +2,14 @@
   <div class="home">
     <div class="content">
       <h1 class="title">¡Bienvenido al Sistema de Pedidos!</h1>
-      <p>Aquí podrás administrar las mesas, realizar pedidos y gestionar tu restaurante de manera eficiente.</p>
-      
+      <p>
+        Aquí podrás administrar las mesas, realizar pedidos y gestionar tu restaurante de manera
+        eficiente.
+      </p>
     </div>
     <div class="image-container">
       <div class="overlay"></div>
-      <img src="https://i.ytimg.com/vi/jUkW0_4SDw8/maxresdefault.jpg" alt="Restaurant Image">
+      <img src="https://i.ytimg.com/vi/jUkW0_4SDw8/maxresdefault.jpg" alt="Restaurant Image" />
     </div>
   </div>
 </template>
@@ -15,10 +17,11 @@
 <script>
 export default {
   // Puedes agregar lógica adicional si es necesario
-};
+}
 </script>
 <style>
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;

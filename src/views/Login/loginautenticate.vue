@@ -10,10 +10,18 @@
           </div>
           <div class="form-group">
             <label for="password">Contraseña</label>
-            <input v-model="form.password" type="password" id="password" class="form-control" required />
+            <input
+              v-model="form.password"
+              type="password"
+              id="password"
+              class="form-control"
+              required
+            />
           </div>
           <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
-          <div v-if="error" class="alert alert-danger mt-3 animated fadeIn">{{ error }}</div>
+          <div v-if="error" class="alert alert-danger mt-3 animated fadeIn">
+            {{ error }}
+          </div>
           <!-- <div class="pie-form">
             <a href="#" class="pie-link">¿Perdiste tu contraseña?</a>
             <a href="#" class="pie-link">¿No tienes cuenta? Regístrate</a>
@@ -31,7 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   data() {
@@ -41,39 +49,39 @@ export default {
         password: ''
       },
       error: null
-    };
+    }
   },
 
   methods: {
     login() {
       axios
-        .post('http://localhost:8000/api/login', {
+        .post('https://pedidos.test/api/login', {
           email: this.form.email,
           password: this.form.password
         })
-        .then(response => {
+        .then((response) => {
           // Manejar la respuesta del backend, por ejemplo, almacenar el token de acceso en localStorage
-          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('token', response.data.token)
           // Redirigir a otra página o realizar otras acciones
-          this.$router.push('/');
+          this.$router.push('/')
         })
-        .catch(error => {
+        .catch((error) => {
           // Manejar el error de autenticación
           if (error.response && error.response.data && error.response.data.message) {
-            this.showError(error.response.data.message);
+            this.showError(error.response.data.message)
           } else {
-            this.showError('Error de autenticación. Por favor, inténtalo de nuevo.');
+            this.showError('Error de autenticación. Por favor, inténtalo de nuevo.')
           }
-        });
+        })
     },
     showError(message) {
-      this.error = message;
+      this.error = message
       setTimeout(() => {
-        this.error = null;
-      }, 5000); // Desaparecerá después de 5 segundos
+        this.error = null
+      }, 5000) // Desaparecerá después de 5 segundos
     }
   }
-};
+}
 </script>
 
 <style scoped>

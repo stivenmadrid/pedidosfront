@@ -1,5 +1,5 @@
 <template>
-   <div class="container-fluid vh-100" style="overflow-y: auto; max-height: 100vh;">
+  <div class="container-fluid vh-100" style="overflow-y: auto; max-height: 100vh">
     <h2 class="title">Pedidos Liberados</h2>
 
     <div v-if="pedidos.length > 0">
@@ -31,35 +31,35 @@
                 </ul>
               </td>
               <td>
-                <button class="btn btn-primary" @click="generarPago(pedido.id)">Generar pago</button>
+                <button class="btn btn-primary" @click="generarPago(pedido.id)">
+                  Generar pago
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div v-else class="empty-message">
-      No hay pedidos disponibles para generar pago.
-    </div>
+    <div v-else class="empty-message">No hay pedidos disponibles para generar pago.</div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
     return {
       pedidos: []
-    };
+    }
   },
   mounted() {
-    this.getPedidos();
+    this.getPedidos()
   },
   methods: {
     getPedidos() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token')
 
       axios
         .get('http://127.0.0.1:8000/api/v1/pedidos-liberados', {
@@ -67,31 +67,31 @@ export default {
             Authorization: `Bearer ${token}`
           }
         })
-        .then(response => {
-          this.pedidos = response.data;
-          this.initDataTable();
+        .then((response) => {
+          this.pedidos = response.data
+          this.initDataTable()
         })
-        .catch(error => {
-          console.error(error);
+        .catch((error) => {
+          console.error(error)
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Ocurrió un error al obtener los pedidos.',
-          });
-        });
+            text: 'Ocurrió un error al obtener los pedidos.'
+          })
+        })
     },
     formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString();
+      const date = new Date(dateString)
+      return date.toLocaleDateString()
     },
     generarPago(pedidoId) {
-      const token = localStorage.getItem('token');
-      const apiUrl = 'http://localhost:8000/api/v1/generarpago';
+      const token = localStorage.getItem('token')
+      const apiUrl = 'https://pedidos.test/api/v1/generarpago'
 
       const data = {
         pedidoId: pedidoId,
         monto: 10000
-      };
+      }
 
       Swal.fire({
         title: 'Confirmar pago',
@@ -100,7 +100,7 @@ export default {
         showCancelButton: true,
         confirmButtonText: 'Confirmar',
         cancelButtonText: 'Cancelar'
-      }).then(result => {
+      }).then((result) => {
         if (result.isConfirmed) {
           axios
             .post(apiUrl, data, {
@@ -108,46 +108,45 @@ export default {
                 Authorization: `Bearer ${token}`
               }
             })
-            .then(response => {
-              const message = response.data.message;
-              console.log('Pago generado:', message);
+            .then((response) => {
+              const message = response.data.message
+              console.log('Pago generado:', message)
               Swal.fire({
                 icon: 'success',
                 title: 'Pago generado',
-                text: 'El pago se ha generado correctamente.',
-              });
-       // Actualizar la página
-       window.location.reload();
-   
+                text: 'El pago se ha generado correctamente.'
+              })
+              // Actualizar la página
+              window.location.reload()
             })
-            .catch(error => {
-              console.error('Error al generar el pago:', error);
-              let errorMessage = 'Ocurrió un error al generar el pago.';
+            .catch((error) => {
+              console.error('Error al generar el pago:', error)
+              let errorMessage = 'Ocurrió un error al generar el pago.'
               if (error.response && error.response.data && error.response.data.error) {
-                errorMessage = error.response.data.error;
+                errorMessage = error.response.data.error
               } else if (error.response && error.response.data && error.response.data.message) {
-                errorMessage = error.response.data.message;
+                errorMessage = error.response.data.message
               }
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: errorMessage,
-              });
-            });
+                text: errorMessage
+              })
+            })
         }
-      });
+      })
     },
     initDataTable() {
       if (this.$refs.dataTable) {
         this.dataTable = new DataTable(this.$refs.dataTable, {
           // Configuración de DataTables
-        });
+        })
       }
     }
   },
   beforeDestroy() {
     if (this.dataTable) {
-      this.dataTable.destroy();
+      this.dataTable.destroy()
     }
   },
   filters: {
@@ -155,17 +154,15 @@ export default {
       const formatter = new Intl.NumberFormat('es', {
         style: 'currency',
         currency: 'USD'
-      });
-      return formatter.format(value);
+      })
+      return formatter.format(value)
     }
   }
-};
+}
 </script>
-
 
 <style scoped>
 .container-fluid {
- 
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -178,16 +175,16 @@ export default {
 }
 
 .title {
-    font-size: 56px;
-    font-weight: bold;
-    color: white;
-    border-radius: 30px;
-    margin-bottom: 20px;
-    animation: slideInUp 1s ease;
-    -webkit-text-stroke: 2px orangered;
-  color: white; 
+  font-size: 56px;
+  font-weight: bold;
+  color: white;
+  border-radius: 30px;
+  margin-bottom: 20px;
+  animation: slideInUp 1s ease;
+  -webkit-text-stroke: 2px orangered;
+  color: white;
   text-align: center;
-  }
+}
 
 .table-responsive {
   width: 100%;
